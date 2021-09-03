@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?AutomationStudio FileVersion="4.9"?>
+<BR.AS.HardwareTopology>
+  <TimeStamps>
+    <TimeStamp LogicalPath="Config1.Hardware.hw" LastWriteTime="09/03/2021 10:35:06" />
+  </TimeStamps>
+  <Modules>
+    <Module Name="X20CP3586" Type="X20CP3586" X="100" Y="100" />
+    <Module Name="8YFLM01.0000.00I-1" Type="8YFLM01.0000.00I-1" X="360" Y="282" />
+  </Modules>
+  <Links>
+    <Link From="8YFLM01.0000.00I-1" To="X20CP3586" FromPort="PLK1" ToPort="IF3" IsRoutedByUser="False">
+      <Point X="393" Y="326" />
+      <Point X="393" Y="326" />
+      <Point X="393" Y="333" />
+      <Point X="393" Y="345" />
+      <Point X="156" Y="345" />
+      <Point X="156" Y="200" />
+      <Point X="156" Y="187" />
+      <Point X="156" Y="187" />
+    </Link>
+  </Links>
+  <InfoElements />
+</BR.AS.HardwareTopology>
