@@ -21,10 +21,11 @@
   </Objects>
   <Configuration ModuleId="X20CP3586">
     <AutomationRuntime Version="B4.91" />
-    <Build GccVersion="4.1.2" />
+    <Build AdditionalBuildOptions="-D_REENTRANT -D_AR_I386_AUTOMATION_STUDIO_ -D_REPLACE_CONST -U__STRICT_ANSI__ " GccVersion="4.1.2" />
     <DefaultTargetMemory Tasks="UserROM" />
     <Safety SafetyRelease="0.0" />
-    <Transfer SavedOfflineInstallationFolder="" SavedPipDestinationFolder="" SavedRuntimeUtilityCenterPackagePath="" />
+    <TaskClasses DefaultIoTaskClass="Cyclic1" />
+    <Transfer AddToUserPart="False" AdditionalUserDir="" AllowDowngrade="True" AllowInitialTransfer="False" AllowPartitioning="False" ExecuteInitExitProgram="True" ForceInitialTransfer="False" IdentificationTypeValue="" IgnoreVersion="True" KeepNonVolatileMemory="False" PreserveVariableValues="False" ProjectConsistent="False" RebootDuringTransfer="True" SavedOfflineInstallationFolder="" SavedPipDestinationFolder="" SavedRuntimeUtilityCenterPackagePath="" TargetIdentificationType="Always" TryToBootInRunMode="False" UserFilesIgnoreDifference="True" />
     <Vc FirmwareVersion="V4.72.3" />
   </Configuration>
 </Cpu>

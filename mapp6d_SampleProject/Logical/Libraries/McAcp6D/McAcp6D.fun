@@ -93,7 +93,7 @@ FUNCTION_BLOCK MC_BR_AsmBuffer_Acp6D (*Control the motion buffer of all shuttles
 	VAR_INPUT
 		Assembly : REFERENCE TO Mc6DAssemblyType; (*The assembly reference establishes the connection between the function block and the assembly.*)
 		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*)
-		Option	: McAcp6DBufferOptionEnum; (*Select to block, release or clear the buffer. Get status is currently not available for this command.*)
+		Option	: McAcp6DAsmBufferOptionEnum; (*Select to block, release or clear the buffer. Get status is currently not available for this command.*)
 	END_VAR
 		VAR_OUTPUT
 		Done 		: BOOL; (*Execution successful. Function block is finished*)
@@ -101,7 +101,6 @@ FUNCTION_BLOCK MC_BR_AsmBuffer_Acp6D (*Control the motion buffer of all shuttles
 		CommandAborted 	: BOOL; (*Command aborted by another command*)
 		Error 		: BOOL; (*Error occurred during execution.*)
 		ErrorID 	: DINT; (*Error number*)
-		BufferInfo 	: McAcp6DBufferInfoType; (*Buffer information. Currently not available.*)
 	END_VAR
 	VAR
 		Internal : McInternalType;
@@ -165,6 +164,138 @@ FUNCTION_BLOCK MC_BR_ShStereotypeDelete_Acp6D (*Delete a shuttle stereotype*)
 END_FUNCTION_BLOCK
 
 
+FUNCTION_BLOCK MC_BR_MacroDelete_Acp6D (*Delete a macro*)
+	VAR_INPUT
+		Assembly : REFERENCE TO Mc6DAssemblyType; (*The assembly reference establishes the connection between the function block and the assembly.*)
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*)
+		Name	: STRING[32]; (*Name identifier for the macro*) 
+		Command : McAcp6DMacroDeleteCmdEnum; (*Delete specifc macro or delete all. If all selected, input "Name" will be ignored.*) 
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*)
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*)
+		CommandAborted 	: BOOL; (*Command aborted by another command*)
+		Error 		: BOOL; (*Error occurred during execution.*)
+		ErrorID 	: DINT; (*Error number*)
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
+
+
+
+
+FUNCTION_BLOCK MC_BR_MacroCreate_Acp6D (*Create a macro and return a shuttle reference*)
+	VAR_INPUT
+		Assembly : REFERENCE TO Mc6DAssemblyType; (*The assembly reference establishes the connection between the function block and the assembly.*)
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*)
+		Parameters	: McAcp6DMacroCreateParType; (*Parameters for a macro.*)
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*)
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*)
+		CommandAborted 	: BOOL; (*Command aborted by another command*)
+		Error 		: BOOL; (*Error occurred during execution.*)
+		ErrorID 	: DINT; (*Error number*)
+		MacroShuttle: Mc6DShuttleType; (* Macro shuttle reference*)
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK MC_BR_VirtualShCreate_Acp6D (*Create a virtual and return a shuttle reference *)
+	VAR_INPUT
+		Assembly : REFERENCE TO Mc6DAssemblyType; (*The assembly reference establishes the connection between the function block and the assembly.*)
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*)
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*)
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*)
+		CommandAborted 	: BOOL; (*Command aborted by another command*)
+		Error 		: BOOL; (*Error occurred during execution.*)
+		ErrorID 	: DINT; (*Error number*)
+		VirtualShuttle: Mc6DShuttleType; (* Macro shuttle reference*)
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK MC_BR_ShGroupCreate_Acp6D (*Create a macro and return a macro shuttle*)
+	VAR_INPUT
+		Assembly : REFERENCE TO Mc6DAssemblyType; (*The assembly reference establishes the connection between the function block and the assembly.*)
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*)
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*)
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*)
+		CommandAborted 	: BOOL; (*Command aborted by another command*)
+		Error 		: BOOL; (*Error occurred during execution.*)
+		ErrorID 	: DINT; (*Error number*)
+		ShuttleGroup: Mc6DShuttleGroupType; (* Shuttle group shuttle reference*)
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK MC_BR_MacroSave_Acp6D (*Save macro*)
+	VAR_INPUT
+		Shuttle : REFERENCE TO Mc6DShuttleType; (*The shuttle reference establishes the connection between the function block and the shuttle.*)
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*)
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*)
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*) 
+		CommandAborted 	: BOOL; (*Command aborted by another command*)
+		Error 		: BOOL; (*Error occurred during execution.*) 
+		ErrorID 	: DINT; (*Error number*)
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK MC_BR_MacroClear_Acp6D (*Clear commands from a macro*)
+	VAR_INPUT
+		Shuttle : REFERENCE TO Mc6DShuttleType; (*The shuttle reference establishes the connection between the function block and the shuttle.*)
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*)
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*)
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*) 
+		CommandAborted 	: BOOL; (*Command aborted by another command*)
+		Error 		: BOOL; (*Error occurred during execution.*) 
+		ErrorID 	: DINT; (*Error number*)
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK MC_BR_MacroRun_Acp6D (*Run a Macro movement on a specific shuttle*)
+VAR_INPUT
+		Shuttle : REFERENCE TO Mc6DShuttleType; (*The shuttle reference establishes the connection between the function block and the shuttle.*)
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*) 
+		Name : STRING[32]; (*Name identifier for the macro to run*)  
+		CommandLabel : UINT; (*Optional command label to be associated with this command.*) 
+	END_VAR
+	VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*) 
+		Acknowledge : BOOL; (*Command is accepted by the controller. Command placed in motion buffer.*) 
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*) 
+		CommandAborted 	: BOOL; (*Command aborted by another command*) 
+		Error 		: BOOL; (*Error occurred during execution.*) 
+		ErrorID 	: DINT; (*Error number*) 
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
 FUNCTION_BLOCK MC_BR_ZoneCreate_Acp6D (*Create a new zone*)
 	VAR_INPUT
 		Assembly : REFERENCE TO Mc6DAssemblyType; (*The assembly reference establishes the connection between the function block and the assembly.*)
@@ -182,8 +313,6 @@ FUNCTION_BLOCK MC_BR_ZoneCreate_Acp6D (*Create a new zone*)
 		Internal : McInternalType;
 	END_VAR
 END_FUNCTION_BLOCK
-
-
 
 FUNCTION_BLOCK MC_BR_AsmLevitation_Acp6D (*Leviate or Land a shuttle*)
 	VAR_INPUT
@@ -225,6 +354,27 @@ FUNCTION_BLOCK MC_BR_AsmGetShuttle_Acp6D (*Loop through a snapshot of shuttles o
 	END_VAR
 END_FUNCTION_BLOCK
 
+FUNCTION_BLOCK MC_BR_AsmGetVirtualSh_Acp6D (*Loop through a snapshot of virtual shuttles on the assembly.*)
+	VAR_INPUT
+		Assembly : REFERENCE TO Mc6DAssemblyType; (*The assembly reference establishes the connection between the function block and the assembly.*)
+		Enable : BOOL;  (* The function block is active as long as this input is set.*)
+		Next : BOOL; (* Show data of next shuttle.*)
+	END_VAR
+	VAR_OUTPUT
+		Valid : BOOL; (* Function block's output values can be used.*)
+		Busy : BOOL; (* Function block is active and must continue to be called.*)
+		Error : BOOL; (* Execution error*)
+		ErrorID : DINT; (* Error number*)
+		TotalCount : UINT; (* Total amount of shuttles in the assembly.*)
+		RemainingCount : UINT; (* Remaining shuttles to loop through.*)
+		VirtualShuttle: Mc6DShuttleType; (* Shuttle Reference*)
+		AdditionalInfo : McAcp6DGetShAddInfoType; (*Additional shuttle information*)
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
 FUNCTION_BLOCK MC_BR_AsmGetSegment_Acp6D (*Loop through a snapshot of segments on the assembly.*)
 	VAR_INPUT
 		Assembly : REFERENCE TO Mc6DAssemblyType; (*The assembly reference establishes the connection between the function block and the assembly.*)
@@ -251,15 +401,15 @@ FUNCTION_BLOCK MC_BR_AsmGetZone_Acp6D (*Loop through a snapshot of zones on the 
 	VAR_INPUT
 		Assembly : REFERENCE TO Mc6DAssemblyType; (*The assembly reference establishes the connection between the function block and the assembly.*)
 		Enable : BOOL;  (* The FB is active as long as this input is set.*)
-		Next : BOOL; (* Show data of next segment.*)
+		Next : BOOL; (* Show data of next zone.*)
 	END_VAR
 	VAR_OUTPUT
 		Valid : BOOL; (* Function block's output values can be used.*)
 		Busy : BOOL; (* Function block is active and must continue to be called.*)
 		Error : BOOL; (* Execution error*)
 		ErrorID : DINT; (* Error number*)
-		TotalCount : UINT; (* Total amount of segments in the assembly.*)
-		RemainingCount : UINT; (* Remaining segments to loop through.*)
+		TotalCount : UINT; (* Total amount of zones in the assembly.*)
+		RemainingCount : UINT; (* Remaining zones to loop through.*)
 		Zone: Mc6DZoneType; (* Zone reference *)
 		AdditionalInfo : McAcp6DGetZoneAddInfoType; (* Additional zone information *)
 	END_VAR
@@ -267,6 +417,28 @@ FUNCTION_BLOCK MC_BR_AsmGetZone_Acp6D (*Loop through a snapshot of zones on the 
 		Internal : McInternalType;
 	END_VAR
 END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK MC_BR_AsmGetShGroup_Acp6D (*Loop through a snapshot of shuttle groups on the assembly.*)
+	VAR_INPUT
+		Assembly : REFERENCE TO Mc6DAssemblyType; (*The assembly reference establishes the connection between the function block and the assembly.*)
+		Enable : BOOL;  (* The FB is active as long as this input is set.*)
+		Next : BOOL; (* Show data of next shuttle groups.*)
+	END_VAR
+	VAR_OUTPUT
+		Valid : BOOL; (* Function block's output values can be used.*)
+		Busy : BOOL; (* Function block is active and must continue to be called.*)
+		Error : BOOL; (* Execution error*)
+		ErrorID : DINT; (* Error number*)
+		TotalCount : UINT; (* Total amount of shuttle groups in the assembly.*)
+		RemainingCount : UINT; (* Remaining shuttle groups to loop through.*)
+		ShuttleGroup: Mc6DShuttleGroupType; (* Shuttle Group reference *)
+		AdditionalInfo : McAcp6DGetShGroupAddInfoType; (* Additional group information *)
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
 
 FUNCTION_BLOCK MC_BR_AsmGetInfo_Acp6D (*Get assembly information.*)
 	VAR_INPUT
@@ -804,10 +976,6 @@ FUNCTION_BLOCK MC_BR_ZoneGetBarrierInfo_Acp6D (*Get barrier information*)
 	END_VAR
 END_FUNCTION_BLOCK
 
-
-
-
-
 FUNCTION_BLOCK MC_BR_AsmReset_Acp6D (*Reset assembly from error state *)
 	VAR_INPUT
 		Assembly : REFERENCE TO Mc6DAssemblyType; (*The assembly reference establishes the connection between the function block and the assembly.*) 
@@ -826,5 +994,127 @@ FUNCTION_BLOCK MC_BR_AsmReset_Acp6D (*Reset assembly from error state *)
 	END_VAR
 END_FUNCTION_BLOCK
 
+FUNCTION_BLOCK MC_BR_ShPlanet_Acp6D (*Add/Remove up to 32 planet shuttles *)
+	VAR_INPUT
+		Shuttle : REFERENCE TO Mc6DShuttleType; (*Sun reference. The controller reference provides the link between the function block and the Acopos6D shuttle.*) 
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*) 
+		Parameters: McAcp6DPlanetParType; (*Parameters for add shuttles to sun/planet system group.*) 
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*) 
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*) 
+		CommandAborted 	: BOOL; (*Command aborted by another command*) 
+		Error 		: BOOL; (*Error occurred during execution.*) 
+		ErrorID 	: DINT; (*Error number*) 
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
 
+FUNCTION_BLOCK MC_BR_ShGroupAddShuttle_Acp6D (*Add up to 32 shuttles to a shuttle group *)
+	VAR_INPUT
+		ShuttleGroup : REFERENCE TO Mc6DShuttleGroupType; (*The shuttle reference provides the link between the function block and the Acopos6D shuttle.*) 
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*) 
+		Parameters: McAcp6DShGroupAddShParType; (*Parameters for add shuttles to shuttle group.*) 
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*) 
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*) 
+		CommandAborted 	: BOOL; (*Command aborted by another command*) 
+		Error 		: BOOL; (*Error occurred during execution.*) 
+		ErrorID 	: DINT; (*Error number*) 
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK MC_BR_ShGroupClear_Acp6D (*Clear all shuttles from a shuttle group*)
+	VAR_INPUT
+		ShuttleGroup : REFERENCE TO Mc6DShuttleGroupType; (*The shuttle reference provides the link between the function block and the Acopos6D shuttle.*) 
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*) 
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*) 
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*) 
+		CommandAborted 	: BOOL; (*Command aborted by another command*) 
+		Error 		: BOOL; (*Error occurred during execution.*) 
+		ErrorID 	: DINT; (*Error number*) 
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK MC_BR_ShGroupGetInfo_Acp6D (*Get info from a shuttle group*)
+	VAR_INPUT
+		ShuttleGroup : REFERENCE TO Mc6DShuttleGroupType; (*The shuttle reference provides the link between the function block and the Acopos6D shuttle.*) 
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*) 
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*) 
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*) 
+		CommandAborted 	: BOOL; (*Command aborted by another command*) 
+		Error 		: BOOL; (*Error occurred during execution.*) 
+		ErrorID 	: DINT; (*Error number*)
+		Info		: McAcp6DShGroupInfoType;
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK MC_BR_ShGroupCoupleCtrl_Acp6D (*Couple or decouple a shuttle group*)
+	VAR_INPUT
+		ShuttleGroup : REFERENCE TO Mc6DShuttleGroupType; (*The shuttle reference provides the link between the function block and the Acopos6D shuttle.*) 
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*)
+		Parameters : McAcp6DShGroupCoupleCtrlParType; (* Parameters for coupling a shuttle group. *)
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*) 
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*) 
+		CommandAborted 	: BOOL; (*Command aborted by another command*) 
+		Error 		: BOOL; (*Error occurred during execution.*) 
+		ErrorID 	: DINT; (*Error number*)
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK MC_BR_ShGroupBuffer_Acp6D (*Block and release a shuttle group buffer or decouple a shuttle group*)
+	VAR_INPUT
+		ShuttleGroup : REFERENCE TO Mc6DShuttleGroupType; (*The shuttle reference provides the link between the function block and the Acopos6D shuttle.*) 
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*)
+		Option : McAcp6DShGroupBufferOptionEnum; (*Buffer parameters*)
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*) 
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*) 
+		CommandAborted 	: BOOL; (*Command aborted by another command*) 
+		Error 		: BOOL; (*Error occurred during execution.*) 
+		ErrorID 	: DINT; (*Error number*)
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK MC_BR_ShGroupDelete_Acp6D (*Delete a shuttle group*)
+	VAR_INPUT
+		ShuttleGroup : REFERENCE TO Mc6DShuttleGroupType; (*The shuttle reference provides the link between the function block and the Acopos6D shuttle.*) 
+		Execute : BOOL; (*Execution of the function block begins on a rising edge of this input.*) 
+	END_VAR
+		VAR_OUTPUT
+		Done 		: BOOL; (*Execution successful. Function block is finished*) 
+		Busy 		:  BOOL; (*Function block is active and must continue to be called.*) 
+		CommandAborted 	: BOOL; (*Command aborted by another command*) 
+		Error 		: BOOL; (*Error occurred during execution.*) 
+		ErrorID 	: DINT; (*Error number*) 
+	END_VAR
+	VAR
+		Internal : McInternalType;
+	END_VAR
+END_FUNCTION_BLOCK
 

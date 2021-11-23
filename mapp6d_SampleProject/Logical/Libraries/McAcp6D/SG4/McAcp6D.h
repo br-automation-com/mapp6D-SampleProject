@@ -1,6 +1,6 @@
 /* Automation Studio generated header file */
 /* Do not edit ! */
-/* McAcp6D 1.00.0 */
+/* McAcp6D 1.01.9 */
 
 #ifndef _MCACP6D_
 #define _MCACP6D_
@@ -9,7 +9,7 @@ extern "C"
 {
 #endif
 #ifndef _McAcp6D_VERSION
-#define _McAcp6D_VERSION 1.00.0
+#define _McAcp6D_VERSION 1.01.9
 #endif
 
 #include <bur/plctypes.h>
@@ -46,6 +46,11 @@ typedef enum McAcp6DShStereotypeDeleteCmdEnum
 	mcACP6D_SH_ST_DELETE_ALL = 1
 } McAcp6DShStereotypeDeleteCmdEnum;
 
+typedef enum McAcp6DMacroDeleteCmdEnum
+{	mcACP6D_MACRO_DELETE_SPECIFIC = 0,
+	mcACP6D_MACRO_DELETE_ALL = 1
+} McAcp6DMacroDeleteCmdEnum;
+
 typedef enum McAcp6dPLCopenStateEnum
 {	mcACP6D_DISABLED = 0,
 	mcACP6D_HOMING = 1,
@@ -80,6 +85,26 @@ typedef enum McAcp6DZoneStateEnum
 	mcACP6D_ZONE_ACTIVATING = 4,
 	mcACP6D_ZONE_ACTIVE_CLOSED = 5
 } McAcp6DZoneStateEnum;
+
+typedef enum McAcp6DPlanetCtrlOptionEnum
+{	mcACP6D_PLANET_REMOVE_SH = 0,
+	mcACP6D_PLANET_ADD_SH = 1
+} McAcp6DPlanetCtrlOptionEnum;
+
+typedef enum McAcp6DShGroupCoupleStateEnum
+{	mcACP6D_SH_GROUP_DECOUPLED = 0,
+	mcACP6D_SH_GROUP_COUPLED = 1
+} McAcp6DShGroupCoupleStateEnum;
+
+typedef enum McAcp6DShGroupCoupleOptionEnum
+{	mcACP6D_SH_GROUP_DECOUPLE = 0,
+	mcACP6D_SH_GROUP_COUPLE = 1
+} McAcp6DShGroupCoupleOptionEnum;
+
+typedef enum McAcp6DShGroupCoupleModeEnum
+{	mcACP6D_SH_GROUP_INDV_ROT_REF = 0,
+	mcACP6D_SH_GROUP_CMN_ROT_REF = 1
+} McAcp6DShGroupCoupleModeEnum;
 
 typedef enum McAcp6DZoneTypeEnum
 {	mcACP6D_ZONE_TYPE_NORMAL = 0
@@ -130,6 +155,17 @@ typedef enum McAcp6DHaltOptionEnum
 {	mcACP6D_CONTINUE = 0,
 	mcACP6D_HALT = 1
 } McAcp6DHaltOptionEnum;
+
+typedef enum McAcp6DAsmBufferOptionEnum
+{	mcACP6D_BUFFER_ASM_BLOCK = 0,
+	mcACP6D_BUFFER_ASM_RELEASE = 1,
+	mcACP6D_BUFFER_ASM_CLEAR = 2
+} McAcp6DAsmBufferOptionEnum;
+
+typedef enum McAcp6DShGroupBufferOptionEnum
+{	mcACP6D_BUFFER_SHGROUP_BLOCK = 0,
+	mcACP6D_BUFFER_SHGROUP_RELEASE = 1
+} McAcp6DShGroupBufferOptionEnum;
 
 typedef enum McAcp6DBufferOptionEnum
 {	mcACP6D_BUFFER_BLOCK = 0,
@@ -183,6 +219,14 @@ typedef struct Mc6DInternalShuttleIfType
 typedef struct Mc6DShuttleType
 {	struct Mc6DInternalShuttleIfType* controlif;
 } Mc6DShuttleType;
+
+typedef struct Mc6DInternalShuttleGroupIfType
+{	plcdword vtable;
+} Mc6DInternalShuttleGroupIfType;
+
+typedef struct Mc6DShuttleGroupType
+{	struct Mc6DInternalShuttleGroupIfType* controlif;
+} Mc6DShuttleGroupType;
 
 typedef struct Mc6DInternalSegmentIfType
 {	plcdword vtable;
@@ -296,6 +340,29 @@ typedef struct McAcp6DMoveInPlaneAsyncParType
 	plcbit MoveOnlySelectedShuttles;
 } McAcp6DMoveInPlaneAsyncParType;
 
+typedef struct McAcp6DShGroupShListParType
+{	struct Mc6DShuttleType* Shuttle;
+} McAcp6DShGroupShListParType;
+
+typedef struct McAcp6DShGroupAddShParType
+{	struct McAcp6DShGroupShListParType ShuttleList[32];
+} McAcp6DShGroupAddShParType;
+
+typedef struct McAcp6DPlanetParType
+{	enum McAcp6DPlanetCtrlOptionEnum Option;
+	struct McAcp6DShGroupShListParType ShuttleList[32];
+} McAcp6DPlanetParType;
+
+typedef struct McAcp6DShGroupCoupleCtrlParType
+{	enum McAcp6DShGroupCoupleModeEnum Mode;
+	enum McAcp6DShGroupCoupleOptionEnum Option;
+} McAcp6DShGroupCoupleCtrlParType;
+
+typedef struct McAcp6DShGroupInfoType
+{	enum McAcp6DShGroupCoupleStateEnum CoupleState;
+	unsigned short NumberOfShuttles;
+} McAcp6DShGroupInfoType;
+
 typedef struct McAcp6DSegBarrierInfoType
 {	enum McAcp6DZoneStateEnum State;
 	unsigned short NumberOfShuttles;
@@ -329,6 +396,10 @@ typedef struct McAcp6DGetSegAddInfoType
 typedef struct McAcp6DGetZoneAddInfoType
 {	unsigned short ZoneID;
 } McAcp6DGetZoneAddInfoType;
+
+typedef struct McAcp6DGetShGroupAddInfoType
+{	unsigned short GroupID;
+} McAcp6DGetShGroupAddInfoType;
 
 typedef struct McAcp6DBarrierCmdParType
 {	enum McAcp6DBarrierCmdEnum Command;
@@ -417,12 +488,6 @@ typedef struct McAcp6DInPlane6DParType
 	float Acceleration;
 } McAcp6DInPlane6DParType;
 
-typedef struct McAcp6DShGroupCreateParType
-{	unsigned short GroupID;
-	unsigned char NumberOfShuttles;
-	struct Mc6DShuttleType Shuttle[32];
-} McAcp6DShGroupCreateParType;
-
 typedef struct McAcp6DMove6DParType
 {	struct McAcp6DInPlane6DParType InPlane;
 	struct McAcp6DShortAx6DParType ShortAxis;
@@ -485,6 +550,10 @@ typedef struct McAcp6DShStereotypeParType
 	struct McAcp6DPayloadSizeType PayloadSize;
 	struct McAcp6DCoGType CenterOfGravity;
 } McAcp6DShStereotypeParType;
+
+typedef struct McAcp6DMacroCreateParType
+{	plcstring Name[34];
+} McAcp6DMacroCreateParType;
 
 typedef struct McAcp6DFuncInfoType
 {	unsigned char CmdSta;
@@ -590,10 +659,9 @@ typedef struct MC_BR_AsmBuffer_Acp6D
 {
 	/* VAR_INPUT (analog) */
 	struct Mc6DAssemblyType* Assembly;
-	enum McAcp6DBufferOptionEnum Option;
+	enum McAcp6DAsmBufferOptionEnum Option;
 	/* VAR_OUTPUT (analog) */
 	signed long ErrorID;
-	struct McAcp6DBufferInfoType BufferInfo;
 	/* VAR (analog) */
 	struct McInternalType Internal;
 	/* VAR_INPUT (digital) */
@@ -660,6 +728,134 @@ typedef struct MC_BR_ShStereotypeDelete_Acp6D
 	plcbit Error;
 } MC_BR_ShStereotypeDelete_Acp6D_typ;
 
+typedef struct MC_BR_MacroDelete_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DAssemblyType* Assembly;
+	plcstring Name[33];
+	enum McAcp6DMacroDeleteCmdEnum Command;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_MacroDelete_Acp6D_typ;
+
+typedef struct MC_BR_MacroCreate_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DAssemblyType* Assembly;
+	struct McAcp6DMacroCreateParType Parameters;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	struct Mc6DShuttleType MacroShuttle;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_MacroCreate_Acp6D_typ;
+
+typedef struct MC_BR_VirtualShCreate_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DAssemblyType* Assembly;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	struct Mc6DShuttleType VirtualShuttle;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_VirtualShCreate_Acp6D_typ;
+
+typedef struct MC_BR_ShGroupCreate_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DAssemblyType* Assembly;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	struct Mc6DShuttleGroupType ShuttleGroup;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_ShGroupCreate_Acp6D_typ;
+
+typedef struct MC_BR_MacroSave_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DShuttleType* Shuttle;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_MacroSave_Acp6D_typ;
+
+typedef struct MC_BR_MacroClear_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DShuttleType* Shuttle;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_MacroClear_Acp6D_typ;
+
+typedef struct MC_BR_MacroRun_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DShuttleType* Shuttle;
+	plcstring Name[33];
+	unsigned short CommandLabel;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Acknowledge;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_MacroRun_Acp6D_typ;
+
 typedef struct MC_BR_ZoneCreate_Acp6D
 {
 	/* VAR_INPUT (analog) */
@@ -718,6 +914,27 @@ typedef struct MC_BR_AsmGetShuttle_Acp6D
 	plcbit Error;
 } MC_BR_AsmGetShuttle_Acp6D_typ;
 
+typedef struct MC_BR_AsmGetVirtualSh_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DAssemblyType* Assembly;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	unsigned short TotalCount;
+	unsigned short RemainingCount;
+	struct Mc6DShuttleType VirtualShuttle;
+	struct McAcp6DGetShAddInfoType AdditionalInfo;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Enable;
+	plcbit Next;
+	/* VAR_OUTPUT (digital) */
+	plcbit Valid;
+	plcbit Busy;
+	plcbit Error;
+} MC_BR_AsmGetVirtualSh_Acp6D_typ;
+
 typedef struct MC_BR_AsmGetSegment_Acp6D
 {
 	/* VAR_INPUT (analog) */
@@ -759,6 +976,27 @@ typedef struct MC_BR_AsmGetZone_Acp6D
 	plcbit Busy;
 	plcbit Error;
 } MC_BR_AsmGetZone_Acp6D_typ;
+
+typedef struct MC_BR_AsmGetShGroup_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DAssemblyType* Assembly;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	unsigned short TotalCount;
+	unsigned short RemainingCount;
+	struct Mc6DShuttleGroupType ShuttleGroup;
+	struct McAcp6DGetShGroupAddInfoType AdditionalInfo;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Enable;
+	plcbit Next;
+	/* VAR_OUTPUT (digital) */
+	plcbit Valid;
+	plcbit Busy;
+	plcbit Error;
+} MC_BR_AsmGetShGroup_Acp6D_typ;
 
 typedef struct MC_BR_AsmGetInfo_Acp6D
 {
@@ -1296,6 +1534,130 @@ typedef struct MC_BR_AsmReset_Acp6D
 	plcbit Error;
 } MC_BR_AsmReset_Acp6D_typ;
 
+typedef struct MC_BR_ShPlanet_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DShuttleType* Shuttle;
+	struct McAcp6DPlanetParType Parameters;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_ShPlanet_Acp6D_typ;
+
+typedef struct MC_BR_ShGroupAddShuttle_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DShuttleGroupType* ShuttleGroup;
+	struct McAcp6DShGroupAddShParType Parameters;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_ShGroupAddShuttle_Acp6D_typ;
+
+typedef struct MC_BR_ShGroupClear_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DShuttleGroupType* ShuttleGroup;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_ShGroupClear_Acp6D_typ;
+
+typedef struct MC_BR_ShGroupGetInfo_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DShuttleGroupType* ShuttleGroup;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	struct McAcp6DShGroupInfoType Info;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_ShGroupGetInfo_Acp6D_typ;
+
+typedef struct MC_BR_ShGroupCoupleCtrl_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DShuttleGroupType* ShuttleGroup;
+	struct McAcp6DShGroupCoupleCtrlParType Parameters;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_ShGroupCoupleCtrl_Acp6D_typ;
+
+typedef struct MC_BR_ShGroupBuffer_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DShuttleGroupType* ShuttleGroup;
+	enum McAcp6DShGroupBufferOptionEnum Option;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_ShGroupBuffer_Acp6D_typ;
+
+typedef struct MC_BR_ShGroupDelete_Acp6D
+{
+	/* VAR_INPUT (analog) */
+	struct Mc6DShuttleGroupType* ShuttleGroup;
+	/* VAR_OUTPUT (analog) */
+	signed long ErrorID;
+	/* VAR (analog) */
+	struct McInternalType Internal;
+	/* VAR_INPUT (digital) */
+	plcbit Execute;
+	/* VAR_OUTPUT (digital) */
+	plcbit Done;
+	plcbit Busy;
+	plcbit CommandAborted;
+	plcbit Error;
+} MC_BR_ShGroupDelete_Acp6D_typ;
+
 
 
 /* Prototyping of functions and function blocks */
@@ -1308,11 +1670,20 @@ _BUR_PUBLIC void MC_BR_AsmBuffer_Acp6D(struct MC_BR_AsmBuffer_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_ShStereotypeDefine_Acp6D(struct MC_BR_ShStereotypeDefine_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_ShStereotypeAssign_Acp6D(struct MC_BR_ShStereotypeAssign_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_ShStereotypeDelete_Acp6D(struct MC_BR_ShStereotypeDelete_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_MacroDelete_Acp6D(struct MC_BR_MacroDelete_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_MacroCreate_Acp6D(struct MC_BR_MacroCreate_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_VirtualShCreate_Acp6D(struct MC_BR_VirtualShCreate_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_ShGroupCreate_Acp6D(struct MC_BR_ShGroupCreate_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_MacroSave_Acp6D(struct MC_BR_MacroSave_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_MacroClear_Acp6D(struct MC_BR_MacroClear_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_MacroRun_Acp6D(struct MC_BR_MacroRun_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_ZoneCreate_Acp6D(struct MC_BR_ZoneCreate_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_AsmLevitation_Acp6D(struct MC_BR_AsmLevitation_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_AsmGetShuttle_Acp6D(struct MC_BR_AsmGetShuttle_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_AsmGetVirtualSh_Acp6D(struct MC_BR_AsmGetVirtualSh_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_AsmGetSegment_Acp6D(struct MC_BR_AsmGetSegment_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_AsmGetZone_Acp6D(struct MC_BR_AsmGetZone_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_AsmGetShGroup_Acp6D(struct MC_BR_AsmGetShGroup_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_AsmGetInfo_Acp6D(struct MC_BR_AsmGetInfo_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_AsmGetErrCode_Acp6D(struct MC_BR_AsmGetErrCode_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_AsmReadStatus_Acp6D(struct MC_BR_AsmReadStatus_Acp6D* inst);
@@ -1342,6 +1713,13 @@ _BUR_PUBLIC void MC_BR_ZonePowerOn_Acp6D(struct MC_BR_ZonePowerOn_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_ZoneBarrierCommand_Acp6D(struct MC_BR_ZoneBarrierCommand_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_ZoneGetBarrierInfo_Acp6D(struct MC_BR_ZoneGetBarrierInfo_Acp6D* inst);
 _BUR_PUBLIC void MC_BR_AsmReset_Acp6D(struct MC_BR_AsmReset_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_ShPlanet_Acp6D(struct MC_BR_ShPlanet_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_ShGroupAddShuttle_Acp6D(struct MC_BR_ShGroupAddShuttle_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_ShGroupClear_Acp6D(struct MC_BR_ShGroupClear_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_ShGroupGetInfo_Acp6D(struct MC_BR_ShGroupGetInfo_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_ShGroupCoupleCtrl_Acp6D(struct MC_BR_ShGroupCoupleCtrl_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_ShGroupBuffer_Acp6D(struct MC_BR_ShGroupBuffer_Acp6D* inst);
+_BUR_PUBLIC void MC_BR_ShGroupDelete_Acp6D(struct MC_BR_ShGroupDelete_Acp6D* inst);
 
 
 #ifdef __cplusplus

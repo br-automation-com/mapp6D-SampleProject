@@ -24,10 +24,9 @@ PROGRAM _INIT
 	
 	
 	
+	
+	
 	FBin;
-	
-
-	
 	FBout;
 
 	cycle_time := 0.001;
@@ -133,20 +132,18 @@ PROGRAM _CYCLIC
 	
 	
 
-	IF(MoveSinus)THEN
-		w 		:= 2*amPI*frequnecy; 
-		Inc 	:= amplitude*SIN(w*time)/1000.0; // mm to meter
-		MC_BR_MoveCyclic_0.CyclicPosition.X := Inc;
-		time := time+cycle_time;
-	ELSE
-		time := 0;
-		Inc := 0;
-	END_IF;
+	
+	
+//	IF(errInc <= MAX_ENTRIES)THEN
+//		ErrIDArr[errInc] := FBin.Array[5];
+//		ErrCmdIDOut[errInc] := FBout.Array[3];
+//		
+//		errInc := errInc +1;
+//	END_IF;
 		
 	
 	
 	MC_BR_SegGetInfo_Acp6D_0();
-	
 	MC_BR_AsmGetInfo_Acp6D_0();
 	MC_BR_AsmGetShuttle_Acp6D_0();
 	MC_BR_AsmPowerOn_Acp6D_0();

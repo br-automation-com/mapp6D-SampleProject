@@ -2,11 +2,11 @@
 <?AutomationStudio FileVersion="4.9"?>
 <BR.AS.HardwareTopology>
   <TimeStamps>
-    <TimeStamp LogicalPath="Config1.Hardware.hw" LastWriteTime="09/03/2021 10:35:06" />
+    <TimeStamp LogicalPath="Config1.Hardware.hw" LastWriteTime="11/16/2021 10:50:31" />
   </TimeStamps>
   <Modules>
-    <Module Name="X20CP3586" Type="X20CP3586" X="100" Y="100" />
     <Module Name="8YFLM01.0000.00I-1" Type="8YFLM01.0000.00I-1" X="360" Y="282" />
+    <Module Name="X20CP3586" Type="X20CP3586" X="100" Y="100" />
   </Modules>
   <Links>
     <Link From="8YFLM01.0000.00I-1" To="X20CP3586" FromPort="PLK1" ToPort="IF3" IsRoutedByUser="False">

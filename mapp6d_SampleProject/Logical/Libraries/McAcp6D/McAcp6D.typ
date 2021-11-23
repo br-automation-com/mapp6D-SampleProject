@@ -11,6 +11,10 @@ TYPE
 		controlif : REFERENCE TO Mc6DInternalShuttleIfType;
 	END_STRUCT;
 	
+	Mc6DShuttleGroupType : STRUCT
+		controlif : REFERENCE TO Mc6DInternalShuttleGroupIfType;
+	END_STRUCT;
+	
 	Mc6DSegmentType : STRUCT
 		controlif : REFERENCE TO Mc6DInternalSegmentIfType;
 	END_STRUCT;
@@ -28,6 +32,10 @@ TYPE
 	END_STRUCT;	
 	
 	Mc6DInternalShuttleIfType : STRUCT (*Partial interface type (C only)*)
+		vtable : DWORD;
+	END_STRUCT;
+	
+	Mc6DInternalShuttleGroupIfType : STRUCT (*Partial interface type (C only)*)
 		vtable : DWORD;
 	END_STRUCT;	
 	
@@ -111,6 +119,13 @@ TYPE
 		mcACP6D_SH_ST_DELETE_ALL := 1
 		);
 		
+		
+	McAcp6DMacroDeleteCmdEnum :
+	(
+		mcACP6D_MACRO_DELETE_SPECIFIC := 0,
+		mcACP6D_MACRO_DELETE_ALL := 1
+		);
+		
 	McAcp6dPLCopenStateEnum :
 	(
 		mcACP6D_DISABLED := 0,
@@ -184,6 +199,54 @@ TYPE
 		AsyncPar		 : ARRAY[0..77]OF McAcp6DAsyncPosType;
 		MoveOnlySelectedShuttles : BOOL;
 	END_STRUCT;
+	
+	McAcp6DShGroupShListParType : STRUCT
+		Shuttle : REFERENCE TO Mc6DShuttleType; 
+	END_STRUCT;
+	
+	McAcp6DShGroupAddShParType : STRUCT
+		ShuttleList		 : ARRAY[0..31]OF McAcp6DShGroupShListParType;
+	END_STRUCT;
+	
+	McAcp6DPlanetCtrlOptionEnum :
+	(
+		mcACP6D_PLANET_REMOVE_SH := 0,
+		mcACP6D_PLANET_ADD_SH := 1
+		);
+	
+	
+	McAcp6DPlanetParType : STRUCT
+		Option			 : McAcp6DPlanetCtrlOptionEnum;
+		ShuttleList		 : ARRAY[0..31]OF McAcp6DShGroupShListParType;
+	END_STRUCT;
+	
+	McAcp6DShGroupCoupleStateEnum :
+	(
+		mcACP6D_SH_GROUP_DECOUPLED := 0,
+		mcACP6D_SH_GROUP_COUPLED := 1
+	);
+	
+	McAcp6DShGroupCoupleOptionEnum :
+	(
+		mcACP6D_SH_GROUP_DECOUPLE := 0,
+		mcACP6D_SH_GROUP_COUPLE := 1
+	);
+	
+	McAcp6DShGroupCoupleModeEnum :
+	(
+		mcACP6D_SH_GROUP_INDV_ROT_REF 	:= 0,
+		mcACP6D_SH_GROUP_CMN_ROT_REF 	:= 1
+	);
+	
+	McAcp6DShGroupCoupleCtrlParType : STRUCT
+		Mode	: McAcp6DShGroupCoupleModeEnum;
+		Option 	: McAcp6DShGroupCoupleOptionEnum;
+	END_STRUCT;
+		
+	McAcp6DShGroupInfoType : 	STRUCT 
+		CoupleState : McAcp6DShGroupCoupleStateEnum;
+		NumberOfShuttles : UINT;
+	END_STRUCT;
 		
 	McAcp6DSegBarrierInfoType : 	STRUCT 
 		State : McAcp6DZoneStateEnum;
@@ -217,6 +280,10 @@ TYPE
 	
 	McAcp6DGetZoneAddInfoType : STRUCT
 		ZoneID : UINT;
+	END_STRUCT;
+	
+	McAcp6DGetShGroupAddInfoType : STRUCT
+		GroupID : UINT;
 	END_STRUCT;
 	
 	
@@ -271,6 +338,18 @@ TYPE
 	(
 		mcACP6D_CONTINUE 	:= 0,
 		mcACP6D_HALT		:= 1
+	);
+	
+	McAcp6DAsmBufferOptionEnum : 
+	(
+		mcACP6D_BUFFER_ASM_BLOCK 		:= 0,
+		mcACP6D_BUFFER_ASM_RELEASE 		:= 1,
+		mcACP6D_BUFFER_ASM_CLEAR 		:= 2
+	);
+		McAcp6DShGroupBufferOptionEnum : 
+	(
+		mcACP6D_BUFFER_SHGROUP_BLOCK 		:= 0,
+		mcACP6D_BUFFER_SHGROUP_RELEASE 		:= 1
 	);
 	
 	McAcp6DBufferOptionEnum : 
@@ -385,12 +464,6 @@ TYPE
 		Acceleration : REAL;
 	END_STRUCT;
 	
-	McAcp6DShGroupCreateParType : STRUCT
-		GroupID	: UINT;
-		NumberOfShuttles : USINT;
-		Shuttle : ARRAY[0..31]OF Mc6DShuttleType;
-	END_STRUCT;
-	
 	McAcp6DMove6DParType : STRUCT
 		InPlane : McAcp6DInPlane6DParType;
 		ShortAxis : McAcp6DShortAx6DParType;
@@ -478,8 +551,10 @@ TYPE
 		CenterOfGravity : McAcp6DCoGType;
 	END_STRUCT;
 	
+	McAcp6DMacroCreateParType: STRUCT
+		Name : STRING[33];
+	END_STRUCT;
 	
-		
 	McAcp6DFuncInfoType : 	STRUCT  (*Stores the status of a single function block instance*) (* *) (*#OMIT*)
 		CmdSta : USINT;
 		TicketNumber : USINT;
@@ -488,4 +563,8 @@ TYPE
 		ReadFromPMC : BOOL;
 		MsgPartNStatus : DINT;
 	END_STRUCT;
+	
+
+	
+	
 END_TYPE
