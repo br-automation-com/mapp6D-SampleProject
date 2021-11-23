@@ -1,0 +1,27 @@
+VAR
+	MC_BR_AsmPowerOn_Acp6D_0 : MC_BR_AsmPowerOn_Acp6D;
+	MC_BR_MacroCreate_Acp6D_0 : MC_BR_MacroCreate_Acp6D;
+	MC_BR_MoveInPlane_Acp6D_0 : MC_BR_MoveInPlane_Acp6D;
+	MacroSh : {REDUND_UNREPLICABLE} Mc6DShuttleType;
+	MacroState : USINT;
+	Cmd : CtrlType;
+	MacroName : STRING[28];
+	inc : USINT;
+	helpStr : STRING[28];
+	int_to_str : STRING[4];
+	MC_BR_AsmReadStatus_0 : MC_BR_AsmReadStatus_Acp6D;
+	MC_BR_MacroSave_0 : MC_BR_MacroSave_Acp6D;
+	MC_BR_MacroClear_0 : MC_BR_MacroClear_Acp6D;
+	Clear : BOOL;
+	MC_BR_MacroDelete_0 : MC_BR_MacroDelete_Acp6D;
+	MC_BR_MacroRun_0 : MC_BR_MacroRun_Acp6D;
+	MC_BR_AsmGetShuttle_0 : MC_BR_AsmGetShuttle_Acp6D;
+	ShRefArr : ARRAY[0..MAX_NUM_SH] OF Mc6DShuttleType;
+END_VAR
+VAR CONSTANT
+	MAX_NUM_SH : USINT := 10;
+END_VAR
+VAR
+	i : USINT;
+	TempName : STRING[33];
+END_VAR
